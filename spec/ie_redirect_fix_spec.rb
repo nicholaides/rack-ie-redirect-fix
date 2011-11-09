@@ -36,7 +36,7 @@ describe Rack::IeRedirectFix do
     end
 
     it "should set the appropriate content length" do
-      response.headers['Content-Length'].to_i.should == expected_body.size
+      response.headers['Content-Length'].should == expected_body.size.to_s
     end
 
     its(:status){ should == 302 }
