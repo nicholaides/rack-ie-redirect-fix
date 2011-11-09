@@ -25,7 +25,7 @@ describe Rack::IeRedirectFix do
   end
 
   context "given a to our app" do
-    let(:location){ 'http://other-example.com/some/path' }
+    let(:location)     { 'http://other-example.com/some/path' }
     let(:rack_response){ [302, { "Content-Type" => 'text/plain', 'Location' => location }, ["Some body"]] }
 
     let(:expected_location){ 'https://other-example.com/some/path' }
@@ -44,9 +44,9 @@ describe Rack::IeRedirectFix do
   end
 
   context "given a redirect an external URL" do
-    let(:location){ 'http://google.com/some/path.html' }
-    let(:headers){ { "Content-Type" => 'text/plain', 'Location' => location } }
-    let(:body) { "Redirecting to somewhere" }
+    let(:location)     { 'http://google.com/some/path.html' }
+    let(:headers)      { { "Content-Type" => 'text/plain', 'Location' => location } }
+    let(:body)         { "Redirecting to somewhere" }
     let(:rack_response){ [302, headers, [body]] }
 
     its(:status){ should == 302 }
@@ -58,4 +58,3 @@ describe Rack::IeRedirectFix do
     end
   end
 end
-
