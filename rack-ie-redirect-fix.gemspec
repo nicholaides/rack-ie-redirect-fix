@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Rack::IeRedirectFix::VERSION
   s.authors     = ["Mike Nicholaides"]
   s.email       = ["mike@ablegray.com"]
-  s.homepage    = ""
-  s.summary     = %q{Fixes an issue with redirects that happens with IE}
-  s.description = %q{Fixes an issue with redirects that happens with IE}
+  s.homepage    = "https://github.com/nicholaides/rack-ie-redirect-fix"
+  s.summary     = %q{Fixes an obscure issue with redirects that happens with IE and SSL}
+  s.description = %q{}
 
   s.rubyforge_project = "rack-ie-redirect-fix"
 
