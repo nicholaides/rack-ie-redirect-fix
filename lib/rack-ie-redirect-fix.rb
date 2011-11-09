@@ -14,8 +14,11 @@ module Rack
         uri = URI.parse headers['Location']
         if uri.scheme == "http" and uri.host == env['SERVER_NAME']
           uri.scheme = 'https'
-          headers    = headers.merge 'Location' => uri.to_s
-          body       = [%Q{<html><body>You are being <a href="#{uri.to_s}">redirected</a>.</body></html>}]
+          body_str   = %Q{<html><body>You are being <a href="#{uri.to_s}">redirected</a>.</body></html>}
+
+          headers    = headers.merge 'Location'       => uri.to_s,
+                                     'Content-Length' => body_str.size # The RSpec tests don't pick this up, but this is necessary
+          body       = [body_str]
         end
       end
 

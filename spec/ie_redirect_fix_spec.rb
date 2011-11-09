@@ -29,13 +29,18 @@ describe Rack::IeRedirectFix do
     let(:rack_response){ [302, { "Content-Type" => 'text/plain', 'Location' => location }, ["Some body"]] }
 
     let(:expected_location){ 'https://other-example.com/some/path' }
+    let(:expected_body)    { %Q{<html><body>You are being <a href="#{expected_location}">redirected</a>.</body></html>} }
 
     it "should set the location to an SSL version of that URL" do
       response.headers['Location'].should == expected_location
     end
 
+    it "should set the appropriate content length" do
+      response.headers['Content-Length'].to_i.should == expected_body.size
+    end
+
     its(:status){ should == 302 }
-    its(:body)  { should == %Q{<html><body>You are being <a href="#{expected_location}">redirected</a>.</body></html>} }
+    its(:body)  { should == expected_body }
   end
 
   context "given a redirect an external URL" do
