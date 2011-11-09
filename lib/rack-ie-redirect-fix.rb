@@ -1,4 +1,5 @@
 require "rack-ie-redirect-fix/version"
+require 'uri'
 
 module Rack
   class IeRedirectFix
@@ -9,10 +10,13 @@ module Rack
     def call env
       status, headers, body = @app.call env
 
-      if status.to_i == 302 and headers['Location'] and headers['Location'] !~ /[a-zA-Z]+:\/\//
-        location = "https://#{env['SERVER_NAME']}#{headers['Location']}"
-        headers  = headers.merge 'Location' => location
-        body     = [%Q{Redirecting to <a href="#{location}">#{location}</a>.}]
+      if status.to_i == 302
+        uri = URI.parse headers['Location']
+        if uri.scheme == "http" and uri.host == env['SERVER_NAME']
+          uri.scheme = 'https'
+          headers    = headers.merge 'Location' => uri.to_s
+          body       = [%Q{<html><body>You are being <a href="#{uri.to_s}">redirected</a>.</body></html>}]
+        end
       end
 
       [status, headers, body]

@@ -24,21 +24,21 @@ describe Rack::IeRedirectFix do
     end
   end
 
-  context "given a redirect to a path" do
-    let(:location){ '/some/path.html' }
+  context "given a to our app" do
+    let(:location){ 'http://other-example.com/some/path' }
     let(:rack_response){ [302, { "Content-Type" => 'text/plain', 'Location' => location }, ["Some body"]] }
 
-    let(:expected_location){ 'https://other-example.com/some/path.html' }
+    let(:expected_location){ 'https://other-example.com/some/path' }
 
-    it "should set the location to an absolute URL" do
+    it "should set the location to an SSL version of that URL" do
       response.headers['Location'].should == expected_location
     end
 
     its(:status){ should == 302 }
-    its(:body)  { should == %Q{Redirecting to <a href="#{expected_location}">#{expected_location}</a>.} }
+    its(:body)  { should == %Q{<html><body>You are being <a href="#{expected_location}">redirected</a>.</body></html>} }
   end
 
-  context "given a redirect to to a URL" do
+  context "given a redirect an external URL" do
     let(:location){ 'http://google.com/some/path.html' }
     let(:headers){ { "Content-Type" => 'text/plain', 'Location' => location } }
     let(:body) { "Redirecting to somewhere" }
