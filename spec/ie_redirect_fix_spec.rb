@@ -26,17 +26,19 @@ describe Rack::IeRedirectFix do
 
   context "given a redirect to a path" do
     let(:location){ '/some/path.html' }
-    let(:rack_response){ [302, { "Content-Type" => 'text/plain', 'Location' => location }, ["Redirecting to <a href='/some/path.html'>"]] }
+    let(:rack_response){ [302, { "Content-Type" => 'text/plain', 'Location' => location }, ["Some body"]] }
+
+    let(:expected_location){ 'https://other-example.com/some/path.html' }
 
     it "should set the location to an absolute URL" do
-      response.headers['Location'].should == 'https://other-example.com/some/path.html'
+      response.headers['Location'].should == expected_location
     end
 
     its(:status){ should == 302 }
-    its(:body)  { should == "" }
+    its(:body)  { should == %Q{Redirecting to <a href="#{expected_location}">#{expected_location}</a>.} }
   end
 
-  context "given a redirecto to a URL" do
+  context "given a redirect to to a URL" do
     let(:location){ 'http://google.com/some/path.html' }
     let(:headers){ { "Content-Type" => 'text/plain', 'Location' => location } }
     let(:body) { "Redirecting to somewhere" }

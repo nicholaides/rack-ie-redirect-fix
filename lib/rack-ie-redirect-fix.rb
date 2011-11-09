@@ -8,10 +8,13 @@ module Rack
 
     def call env
       status, headers, body = @app.call env
+
       if status.to_i == 302 and headers['Location'] and headers['Location'] !~ /[a-zA-Z]+:\/\//
-        headers = headers.merge 'Location' => "https://#{env['SERVER_NAME']}#{headers['Location']}"
-        body = [""]
+        location = "https://#{env['SERVER_NAME']}#{headers['Location']}"
+        headers  = headers.merge 'Location' => location
+        body     = [%Q{Redirecting to <a href="#{location}">#{location}</a>.}]
       end
+
       [status, headers, body]
     end
   end
